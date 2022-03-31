@@ -2,13 +2,13 @@ require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose')
-
+const userRouter = require('./Router/userRouter')
 
 const app = express();
 
 
 
-
+app.use('/', userRouter)
 
 
 
