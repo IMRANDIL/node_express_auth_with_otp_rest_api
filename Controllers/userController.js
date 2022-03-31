@@ -32,7 +32,15 @@ exports.signUp = async (req, res, next) => {
     const number = req.body.number;
     console.log(OTP);
 
+    const otp = new Otp({ number: number, otp: OTP });
 
+    const salt = await bcrypt.genSalt(10)
+
+    otp.otp = await bcrypt.hash(otp.otp, salt);
+
+    const result = await otp.save();
+
+    return res.status(200).send('Otp sent successfully!')
 
 }
 
