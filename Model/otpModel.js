@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 
-otpSchema = mongoose.Schema({
+
+
+
+const otpSchema = new Schema({
     number: {
         type: String,
         required: true
