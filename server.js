@@ -8,7 +8,7 @@ const app = express();
 
 
 
-app.use('/', userRouter)
+app.use('/api/user', userRouter)
 
 
 
