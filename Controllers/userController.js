@@ -32,7 +32,7 @@ exports.signUp = async (req, res, next) => {
             specialChars: false
         })
 
-
+        console.log(OTP);
 
 
         const otp = new Otp({ number: number, otp: OTP });
@@ -60,6 +60,58 @@ exports.signUp = async (req, res, next) => {
 }
 
 
+//VERIFY OTP NOW....
+
+
+
+
 exports.verifyOtp = async (req, res, next) => {
+
+
+    try {
+
+
+
+
+
+        const otpHolder = await Otp.find({
+            number: req.body.number
+        });
+
+        if (otpHolder.length === 0) return res.status(400).send('You use an expired OTP!');
+
+        const rightOtpFind = otpHolder[otpHolder.length - 1];
+
+        const validUser = await bcrypt.compare(req.body.otp, rightOtpFind.otp);
+
+        if (rightOtpFind.number === req.body.number && validUser) {
+            const user = new User(_.pick(req.body, ['number']));
+
+            const token = user.generateJWT();
+
+            const result = await user.save();
+
+
+            const OTPdelete = await Otp.deleteMany({
+                number: rightOtpFind.number
+            });
+            return res.status(200).json({ msg: 'User registration successful!', token: token, data: result })
+        } else {
+            return res.status(400).send('Your OTP is wrong!')
+        }
+
+
+
+
+
+
+
+
+    } catch (error) {
+        console.log(error);
+    }
+
+
+
 
 }
